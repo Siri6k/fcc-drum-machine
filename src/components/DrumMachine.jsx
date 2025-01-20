@@ -21,23 +21,24 @@ class DrumMachine extends React.Component {
 
   handleKeyPress(e) {
     const key = e.key.toUpperCase();
-    const id = drumpads.find((drumpad) => drumpad.keyTrigger === key);
+    const pad = drumpads.find((drumpad) => drumpad.keyTrigger === key);
     const audio = document.getElementById(key);
     if (audio) {
       audio.currentTime = 0; // Reset audio to start
       audio.play().catch((error) => console.log(error));
-      this.setState({ display: id ? id.id : "" });
+      this.setState({ display: pad.id });
       setTimeout(() => this.setState({ display: "Press a key" }), 1000);
     }
   }
 
   onKeyPress(e) {
     const id = e.target.children[0].id;
+    const pad = drumpads.find((drumpad) => drumpad.keyTrigger === id);
     let audio = document.getElementById(id);
     if (audio) {
       audio.currentTime = 0; // Reset audio to start
       audio.play().catch((error) => console.log(error));
-      this.setState({ display: id ? id.id : "" });
+      this.setState({ display: pad.id });
 
       setTimeout(() => this.setState({ display: "Press a key" }), 1000);
     }
@@ -97,7 +98,7 @@ class DrumMachine extends React.Component {
           style={{ width: "50%", marginTop: "7%" }}
         >
           <div
-            className="power container d-flex flex-column text-center bg-red"
+            className="power container-fluid d-flex flex-column text-center bg-red"
             style={{ width: "80%" }}
           >
             <p className="text-dark">Power</p>
