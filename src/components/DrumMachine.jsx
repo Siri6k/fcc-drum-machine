@@ -1,4 +1,5 @@
 import React from "react";
+import { drumpads } from "./constants";
 
 class DrumMachine extends React.Component {
   constructor(props) {
@@ -20,11 +21,12 @@ class DrumMachine extends React.Component {
 
   handleKeyPress(e) {
     const key = e.key.toUpperCase();
+    const id = drumpads.find((drumpad) => drumpad.keyTrigger === key);
     const audio = document.getElementById(key);
     if (audio) {
       audio.currentTime = 0; // Reset audio to start
       audio.play().catch((error) => console.log(error));
-      this.setState({ display: "You pressed " + key });
+      this.setState({ display: id ? id.id : "" });
       setTimeout(() => this.setState({ display: "Press a key" }), 1000);
     }
   }
@@ -35,13 +37,112 @@ class DrumMachine extends React.Component {
     if (audio) {
       audio.currentTime = 0; // Reset audio to start
       audio.play().catch((error) => console.log(error));
-      this.setState({ display: "You pressed " + id });
+      this.setState({ display: id ? id.id : "" });
+
       setTimeout(() => this.setState({ display: "Press a key" }), 1000);
     }
   }
 
   render() {
     return (
+      <div
+        className="container-fluid d-flex bg-light p-2 flex-wrap"
+        style={{
+          maxWidth: "600px",
+          maxHeight: "30vh",
+          borderRadius: "20px",
+          border: "2px solid yellow",
+        }}
+      >
+        <div
+          className="container-fluid mt-2 d-flex align-items-center"
+          style={{ width: "100%", height: "15px" }}
+        >
+          <p
+            className="text-center"
+            style={{ color: "blue", marginLeft: "auto" }}
+          >
+            Niplan
+          </p>
+          <img
+            src={this.props.logo}
+            alt="logo"
+            className="align-self-center text-center"
+            style={{ maxHeight: "10px", marginTop: "-10px", marginLeft: "2px" }}
+          />
+        </div>
+        <div className="container" style={{ width: "50%" }}>
+          <div className="row">
+            {drumpads.slice(0, 9).map((drumpad, index) => (
+              <div className="col-4" key={index}>
+                <button
+                  className="drum-pad btn btn-secondary mt-2"
+                  style={{ width: "100%", height: "50px" }}
+                  id={drumpad.keyTrigger.toLowerCase()}
+                  onClick={this.onKeyPress}
+                >
+                  {drumpad.keyTrigger}
+                  <audio
+                    src={drumpad.url}
+                    className="clip"
+                    id={drumpad.keyTrigger}
+                  ></audio>
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div
+          className="container-fluid text-center justify-content-center text-center"
+          style={{ width: "50%", marginTop: "7%" }}
+        >
+          <div
+            className="power container d-flex flex-column text-center bg-red"
+            style={{ width: "80%" }}
+          >
+            <p className="text-dark">Power</p>
+            <div className="form-check form-switch">
+              <input
+                className="form-check-input bg-dark"
+                type="checkbox"
+                id="flexSwitchCheckDefault"
+                style={{ width: "30%", marginLeft: "22%" }}
+              />
+            </div>
+          </div>
+
+          <p
+            id="display"
+            className="container mt-1 bg-dark text-light"
+            style={{
+              width: "70%",
+              height: "40px",
+              backgroundColor: "green",
+              fontSize: "20px",
+            }}
+          >
+            {this.state.display}
+          </p>
+          <div className="form-range">
+            <input
+              type="range"
+              className="form-range"
+              id="customRange1"
+              style={{ width: "80%" }}
+            />
+          </div>
+          <div className="form-check form-switch">
+            <input
+              className="form-check-input bg-dark"
+              type="checkbox"
+              id="flexSwitchCheckDefault"
+              style={{ width: "20%", marginLeft: "32%" }}
+            />
+          </div>
+        </div>
+      </div>
+    );
+    /* return (
       <div
         className="container d-flex bg-light p-2 flex-wrap"
         style={{
@@ -245,7 +346,7 @@ class DrumMachine extends React.Component {
           </div>
         </div>
       </div>
-    );
+    );*/
   }
 }
 
